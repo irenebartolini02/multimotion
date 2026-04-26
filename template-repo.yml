@@ -1,0 +1,23 @@
+survey_version: ""
+raw_data:
+  - ""
+processed_xlsx_data: ""
+old_xlsx_data:
+  -
+merged_xlsx_data: ""
+distance_matrix: ""
+group_space_data: ""
+subject_weights_data: ""
+individual_ground_truth: ""
+plots_folder: ""
+participants_to_exclude:
+  - ""
+
+stimuli_names:
+  - ""
+
+transformations:
+  rotate_90_deg: false
+  rotate_180_deg: false
+  mirror_y: true
+  mirror_x: false

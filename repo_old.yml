@@ -1,0 +1,37 @@
+survey_version: "version_final"
+raw_data:
+  -
+processed_xlsx_data: "survey_data/old_data/updated_data_steven2.xlsx"
+old_xlsx_data:
+  -
+merged_xlsx_data: "survey_data/old_data/updated_data_old_steven_normalised.xlsx"
+distance_matrix: "survey_data/old_data/pca_experiment/distance_matrix_old_steven_normalised.xlsx"
+group_space_data: "survey_data/old_data/pca_experiment/group_space_old_steven_normalised.csv"
+subject_weights_data: "survey_data/old_data/pca_experiment/subject_space_old_steven_normalised.csv"
+individual_ground_truth: "survey_data/old_data/pca_experiment/individual_ground_truth_old_steven_normalised.csv"
+plots_folder: "survey_data/old_data/pca_experiment/ground_truth_plots_old_steven_normalised"
+participants_to_exclude:
+  - "group33_v5_1"
+
+# Stimuli for old experiments
+stimuli_names:
+  - "A1_LP"
+  - "A2_LP"
+  - "A3_LP"
+  - "A4_LP"
+  - "A_HN"
+  - "B_HN"
+  - "C_LN"
+  - "F_HN"
+  - "G_HP"
+  - "H_HP"
+  - "J_Ne"
+  - "K_Ne"
+  - "M_LN"
+  - "N_LN"
+  - "O_LN"
+  - "P_HP"
+  - "Q_HP"
+  - "U_Ne"
+  - "V_Ne"
+  - "W_HN"

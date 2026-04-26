@@ -1,0 +1,176 @@
+survey_version: "version_july_24"
+raw_data:
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_1.txt"
+  # - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_2.txt"
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_3.txt"
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_4.txt"
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_5.txt"
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_v6_05082024.txt"
+  # - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_04102024.txt"
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_V7_19112024.txt"
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_V8_07112024.txt"
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_V9_21112024.txt"
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_V10.txt"
+  # - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_V11.txt"
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_V11_12052025.txt"
+  - "survey_data/SurveyDataJuly24/raw_data/MERGED_SURVEY_RESPONSE_MATRIX_V12.txt"
+processed_xlsx_data: "survey_data/SurveyDataJuly24/exp-2025-11-02-with-lopo_v2/processed_data.xlsx"
+old_xlsx_data:
+  -
+merged_xlsx_data: "survey_data/SurveyDataJuly24/exp-2025-11-02-with-lopo_v2/merged_data.xlsx"
+distance_matrix: "survey_data/SurveyDataJuly24/exp-2025-11-02-with-lopo_v2/distance_matrix.xlsx"
+group_space_data: "survey_data/SurveyDataJuly24/exp-2025-11-02-with-lopo_v2/group_space.csv"
+subject_weights_data: "survey_data/SurveyDataJuly24/exp-2025-11-02-with-lopo_v2/subject_space.csv"
+individual_ground_truth: "survey_data/SurveyDataJuly24/exp-2025-11-02-with-lopo_v2/individual_ground_truth.csv"
+plots_folder: "survey_data/SurveyDataJuly24/exp-2025-11-02-with-lopo_v2/ground_truth_plots"
+fa_folder: "survey_data/SurveyDataJuly24/exp-2025-11-02-with-lopo_v2/fa"
+lopo_folder: "survey_data/SurveyDataJuly24/exp-2025-11-02-with-lopo_v2/lopo"
+l2po_folder: "survey_data/SurveyDataJuly24/exp-2025-11-02-with-lopo_v2/l2po"
+participants_to_exclude:
+  - "F3YZw" # He does not exist in clinical review
+  - "VGCNk" # Excluded according to his responses
+  # Screening
+  - "3hxsz" # No survey
+  - "EMX7o" # No survey
+  - "iHMUL" # No survey
+  - "SaqCY" # No survey
+  - "hit94" # No survey
+  - "pV9tu" # No survey
+  - "4AxqV" # No survey
+  - "agWdu" # No survey
+  - "CAJBM" # No survey
+  - "CEMKM" # No survey
+  - "RYXuu" # Red
+  - "6CCj"  # Red
+  - "8C6iE" # Red - analysis
+  - "cdVZZ" # Red - analysis
+  - "dDLFD" # Red - analysis
+  - "dU5uF" # Red - analysis
+  - "er6ZP" # Red - analysis
+  - "fA8yJ" # Red - analysis
+  - "FS48s" # Red - analysis
+  - "jJUMU" # Red - analysis
+  - "KSPEO" # Red - analysis
+  - "twq7m" # Red - analysis
+  - "uu9cj" # Red - analysis
+  - "VksBp" # Red - analysis
+  - "hMHEK2" # Red - analysis
+  # From 2024-10-09 version
+  - "KfBii" # Red - analysis
+  # Reported by Zeel
+  - "2LBuk"
+  # From 2024-11-23
+  - "8DhRbY" # Same response every each stimulus
+  - "WaWrWi" # He was not paying attention
+  # Poor correlation and problems during experiments
+  - "Yfg4l"
+  - "SbBNV"
+  - "A5TLF"
+  - "Oa4hap"
+  # Poor correlation and problems during experiments (new set)
+  - "9FGka"
+  - "Fk2oP"
+  - "22DFx"
+  - "Lks24r"
+  - "L3OT"
+  - "5BJD3"
+  - "uksXB"
+  - "EJOiBs"
+  # From Zeel analysis
+#  - "EJOiBs"
+#  - "GHft8"
+#  - "G4Egk"
+#  - "Fyt7d"
+  # From 2025-02-22
+  - "oJxBj" # Red
+  # From 2025-05-12
+  - "VBss6" # Red
+  - "Cjddt" # Red
+  - "Lh5dT" # Red
+  - "L2Lzw" # Red
+  - "L2Lzw_2" # Red
+  - "L9TG7" # Red
+  - "Fg2ghyT" # Red
+  - "FmN3" # Red
+  - "FDsxx" # Red
+  - "SDJkl1" # Red
+  # From Ginevra
+  - "Bs73" #
+  - "WQzBV" #
+  # Poor correlation (new set 2025-11-02)
+  - "oPL54"
+  - "XfdEE1-frozen data"
+  - "F3r7tY2"
+  - "ZxDe3"
+  # From Ginevra and Domiziana analysis:
+  - "D9Hh9" #
+  - "Pi9803" #
+  - "gjGzb" #
+  - "Gax8" #
+  - "Asq2L" #
+  - "C55vgtt" #
+  - "FGvyyt76" #
+  - "FRe33j" #
+  - "Fq155K" #
+  - "Jzx44sE" #
+  - "POLk3" #
+  - "glo4N" #
+  - "o3pRtys5" #
+
+
+# Stimuli for JULY 24 experiments
+stimuli_names:
+  - "HN_1"
+  - "HN_2_H"
+  - "HN_2_L"
+  # - "HN_2"
+  - "HN_3_H"
+  - "HN_3_L"
+  # - "HN_3"
+  - "HN_4"
+  # - "HN_5_N"
+  # - "HN_5_P"
+  - "HN_5"
+  - "HN_6"
+  - "HN_7"
+  - "HN_8"
+  - "HP_1_H"
+  - "HP_1_L"
+  # - "HP_1"
+  - "HP_2"
+  - "HP_3_H"
+  - "HP_3_L"
+  # - "HP_3"
+  - "HP_4"
+  - "HP_5"
+  - "HP_6"
+  - "HP_7_H"
+  - "HP_7_L"
+  # - "HP_7"
+  - "HP_8"
+  - "LN_1"
+  - "LN_2"
+  - "LN_3"
+  - "LN_4"
+  - "LN_5"
+  - "LN_6"
+  - "LN_7_N"
+  - "LN_7_P"
+  # - "LN_7"
+  - "LN_8"
+  - "LP_1"
+  - "LP_2"
+  - "LP_3"
+  - "LP_4"
+  - "LP_5"
+  - "LP_6"
+  - "LP_7"
+  - "LP_8"
+
+transformations:
+  rotate_90_deg: false
+  rotate_180_deg: false
+  mirror_y: true
+  # mirror_x: false
+  # mirror_y: false
+  mirror_x: true
