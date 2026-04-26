@@ -119,21 +119,23 @@ These methods are based on tensor decomposition by mode in order to reduce the d
 ### PARAFAC 2
 - **Description**: decompose the tensor into `A_list`, `B`, and `C`. Compared with PARAFAC, `A_list` is a list of stimulus-specific matrices `A_i`, which preserve the individual weights of participant `i` for each stimulus. In addition, there is no global stimulus matrix; `B` is the scaling matrix used to compute the ground truth (`A_i @ B`).
 
-        A_i : (n_stimuli, rank)  - individual, orthogonal
-        B   : (rank, rank)       - shared scaling matrix
-        C   : (n_emotions, rank) - fixed (Russell)
+```text
+A_i : (n_stimuli, rank)  - individual, orthogonal
+B   : (rank, rank)       - shared scaling matrix
+C   : (n_emotions, rank) - fixed (Russell)
+```
 
 To obtain stimulus-specific weights for each participant, the decomposition must respect the PARAFAC2 constraint: `A_i.T @ A_i = Phi` (constant across participants).
 
 **Functions**:
-Model estimation 
+Model estimation:
 ```python
 def parafac2_fixed_C(tensor, C_fixed, n_iter_max=500,
                      tol=1e-8, verbose=True):
     ...
     return A_list, B, C, Phi
 ```
-Ground Truth
+Ground truth:
 ```python
 def generate_individual_ground_truth_parafac2(
         A_list,
@@ -150,15 +152,19 @@ def generate_individual_ground_truth_parafac2(
 
 <img src="img\mean_space_PARAFAC2.png">
 
+- **Pros**: the ground truth is specific for each individual and each stimulus; in general, it is very precise, and each single ground truth is not influenced by the group mean response.
+- **Cons**: the number of parameters to estimate is very large, and the model can be too sensitive to noise.
+
 
 
 
 ### Tucker 3
 - **Description**: Tucker 3 decomposes the tensor `X` as `X ≈ G ×₁ A ×₂ B ×₃ C`, where:
-- `A` (n_partecipants, R_p)contains the participant factors and is estimated from the data;
-- `B` (n_stimuli, R_s) contains the stimulus factors and is estimated from the data;
-- `C` (n_emotions, R_e=2) is fixed to the Russell circumplex representation of the emotions;
-- `G` (R_p, R_s, R_e) is the core tensor that stores the interactions among the three modes.
+
+- `A` (`n_participants`, `R_p`) contains the participant factors and is estimated from the data.
+- `B` (`n_stimuli`, `R_s`) contains the stimulus factors and is estimated from the data.
+- `C` (`n_emotions`, `R_e = 2`) is fixed to the Russell circumplex representation of emotions.
+- `G` (`R_p`, `R_s`, `R_e`) is the core tensor that stores interactions among the three modes.
 
 <img src="img\tucker_decomposition.png">
 
@@ -179,16 +185,17 @@ n_params = I * R_p + J * R_s + R_p * R_s * R_e
 where `R_p` is the participant rank, `R_s` is the stimulus rank, and `R_e = 2` because `C` is fixed in the Russell space.
 
 The selected rank changes how expressive the model is:
-- a smaller `R_p` forces participants to be described by fewer latent profiles, so the model behaves more like a compact set of participant prototypes;
-- a larger `R_p` allows more participant prototypes and more individual variation, but also makes the model easier to overfit and harder to interpret;
-- the same trade-off holds for `R_s` on the stimulus side.
+- A smaller `R_p` forces participants to be described by fewer latent profiles, so the model behaves more like a compact set of participant prototypes.
+- A larger `R_p` allows more participant prototypes and more individual variation, but also makes the model easier to overfit and harder to interpret.
+- The same trade-off holds for `R_s` on the stimulus side.
 
 In practice, each row of `A` is the latent coordinate of one participant in that reduced space. With `R_p = 2`, every participant is represented as a mixture of two prototypes; with larger values, the participant space becomes richer and the ground truth can adapt to more subject-specific patterns.
 
 
-- **Functions**:
 
-Rank selection 
+**Functions**:
+
+Rank selection:
 ```python
 
 def select_tucker3_ranks(tensor: np.ndarray,
@@ -200,7 +207,7 @@ def select_tucker3_ranks(tensor: np.ndarray,
 
 
 ```
-Model estimation 
+Model estimation:
 ```python
 def tucker3_fixed_C(tensor: np.ndarray,
                     C_fixed: np.ndarray,
@@ -212,7 +219,7 @@ def tucker3_fixed_C(tensor: np.ndarray,
     ...
     return A, B, C, G, loss_history
 ```
-Ground Truth
+Ground truth:
 ```python
 def generate_individual_gt_tucker3(A, B, G,
                                    participant_map, stimulus_map,
@@ -223,11 +230,11 @@ def generate_individual_gt_tucker3(A, B, G,
 
 - **Issue**: it is more flexible than PARAFAC because it can capture interactions through the core tensor, but it is also more sensitive to rank choice and can become harder to interpret if the model is over-parameterized.
 
-- **Results**: At the end, the selected rank for R_p and R_s are 2 and 2. 
-- `A` (63, 2)
-- `B` (38, 2)
-- `C` (12, 2) 
-- `G` (2, 2, 2)
+- **Results**: at the end, the selected ranks for `R_p` and `R_s` are `2` and `2`.
+- `A`: `(63, 2)`
+- `B`: `(38, 2)`
+- `C`: `(12, 2)`
+- `G`: `(2, 2, 2)`
  
 log output:
 ``` text
@@ -243,5 +250,7 @@ Top 5:
   [tucker3] Convergenza iter 14 | MSE: 9.093352
 ```
 
-<img src="img\mean_space_TUCKER_centered_on_mode_1.png">
+<img src="img\mean_space_TUCKER3.png">
     
+- **Pros**: fewer parameters to estimate compared with PARAFAC 2, and a more general/stable representation.
+- **Cons**: only two prototype types are extracted, so the individual ground truth is influenced by participant clusters. In general, the ground truth results from translations and dilations of group ground truths (outliers are often ignored). In addition, parameters `R_p` and `R_s` must be set manually, so the model is not fully independent.
