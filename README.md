@@ -243,5 +243,5 @@ Top 5:
   [tucker3] Convergenza iter 14 | MSE: 9.093352
 ```
 
-<img src="img\mean_space_TUCKER3.png">
+<img src="img\mean_space_TUCKER_centered_on_mode_1.png">
     
