@@ -4,7 +4,7 @@
 
 *Dimensionality reduction of participant responses about their feelings* - In 2 dimension space that can be interpeted as Valence and Arousal in Russel's Circumplex 
 
-<img src='results\Russells-Circumplex.webp' >
+<img src='img\Russells-Circumplex.webp' >
 
 
 ## Data Overview
@@ -95,7 +95,7 @@ def select_green_participants(
 
 - **Description**: decomposition of the tensor `(participants, stimuli, emotions)` into 3 matrices `A`, `B`, `C` using the ALS algorithm.
 
-<img src="results\parafac_decomposition.png">
+<img src="img\parafac_decomposition.png">
 
 ```text
 A = (62, 2)  -> participant weights for valence/arousal (mode-0 synthesis)
@@ -114,7 +114,7 @@ Participant_i_stimulus_j_arousal = A[i][1] * B[j][1]
 
 These methods are based on tensor decomposition by mode in order to reduce the dimensionality of the data in a space that can be interpreted as Russell's Circumplex space. In this version, matrix `C`, which synthesizes the emotion mode, is kept fixed.
 
-<img src="results\fixed_C.png">
+<img src="img\fixed_C.png">
 
 ### PARAFAC 2
 - **Description**: decompose the tensor into `A_list`, `B`, and `C`. Compared with PARAFAC, `A_list` is a list of stimulus-specific matrices `A_i`, which preserve the individual weights of participant `i` for each stimulus. In addition, there is no global stimulus matrix; `B` is the scaling matrix used to compute the ground truth (`A_i @ B`).
@@ -148,7 +148,7 @@ def generate_individual_ground_truth_parafac2(
 
 **Results**:
 
-<img src="results\mean_space_PARAFAC2.png">
+<img src="img\mean_space_PARAFAC2.png">
 
 
 
@@ -160,7 +160,7 @@ def generate_individual_ground_truth_parafac2(
 - `C` (n_emotions, R_e=2) is fixed to the Russell circumplex representation of the emotions;
 - `G` (R_p, R_s, R_e) is the core tensor that stores the interactions among the three modes.
 
-<img src="results\tucker_decomposition.png">
+<img src="img\tucker_decomposition.png">
 
 In the implementation, Tucker 3 is estimated with HOOI. `A` and `B` are kept orthogonal by construction, while the scale is absorbed by `G`. The individual ground truth is then computed with the bilinear form:
 
@@ -243,5 +243,5 @@ Top 5:
   [tucker3] Convergenza iter 14 | MSE: 9.093352
 ```
 
-<img src="results\mean_space_TUCKER3.png">
+<img src="img\mean_space_TUCKER3.png">
     
