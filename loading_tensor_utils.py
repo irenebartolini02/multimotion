@@ -13,7 +13,7 @@ CORRECT_PARTICIPANTS = ['GFGzP', 'KWgkc', 'EXAMPLE', 'tMGNS', 'urJvc', 'yb3T2', 
  'FcXX1', 'K34LOp', 'KLO33', 'Lso2g', 'Ou4tR', 'P67Dftt', 'SxRtt99', 'V11GHjjk',
  'VBr4ssd', 'XCv32m', 'XfdEE1', 'rt8Ye0r']
 
-def select_green_participants(emotions_to_use, preprocessed_data_file="preprocessed_data.csv", correct_participants=CORRECT_PARTICIPANTS):
+def select_green_participants(emotions_to_use, normalization='MinMax', preprocessed_data_file="preprocessed_data.csv", correct_participants=CORRECT_PARTICIPANTS):
     """
     Use this function after "convert_multiple_experiments" to load the data in only one csv file:
      1.  filter only the correct participants and the stimuli (without meditation, 
@@ -24,6 +24,7 @@ def select_green_participants(emotions_to_use, preprocessed_data_file="preproces
 
     Args:
         emotions_to_use (list): List of emotion column names to process.
+        normalization (str): The normalization method to use ('MinMax' or 'Overall').
         preprocessed_data_file (str): Path to save the preprocessed data CSV file.
         correct_participants (list): List of participant IDs to include in the analysis.
     Returns:
@@ -84,11 +85,30 @@ def select_green_participants(emotions_to_use, preprocessed_data_file="preproces
     df_for_tensor = df_filtered.rename(columns={'respondent': 'Participant', 'stimulus': 'Stimulus_Name'})
 
     # add normalized columns for each emotion betweem -1 and 1
-    min=0
-    max=9
-    for emotion in emotions_to_use:
-        norm_col = f'{emotion}_normalized'
-        df_for_tensor[norm_col] = (df_for_tensor[emotion] - min) / (max - min) * 2 - 1
+
+
+    if normalization == 'MinMax':
+        # Normalization MinMax for each participant score individually (min is the minimum score applied an Max is the maximum score applied by a certain participant across all stimuli)
+        for row in df_for_tensor.itertuples(index=False):
+            participant = row.Participant
+            participant_mask = df_for_tensor['Participant'] == participant
+            for emotion in emotions_to_use:
+                norm_col = f'{emotion}_normalized'
+                min_score = df_for_tensor.loc[participant_mask, emotion].min()
+                max_score = df_for_tensor.loc[participant_mask, emotion].max()
+                if max_score > min_score:  # avoid division by zero
+                    df_for_tensor.loc[participant_mask, norm_col] = (df_for_tensor.loc[participant_mask, emotion] - min_score) / (max_score - min_score) * 2 - 1
+                else:
+                    df_for_tensor.loc[participant_mask, norm_col] = 0  # if all scores are the same, set normalized to 0
+
+    
+    else: 
+        # Normalization Overall: each score is normalized using the global min and max (0 and 9)
+        min=0
+        max=9
+        for emotion in emotions_to_use:
+            norm_col = f'{emotion}_normalized'
+            df_for_tensor[norm_col] = (df_for_tensor[emotion] - min) / (max - min) * 2 - 1
 
     df_for_tensor.to_csv(preprocessed_data_file, index=False)
 

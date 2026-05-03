@@ -2,7 +2,7 @@
 
 ## Goal
 
-*Dimensionality reduction of participant responses about their feelings* - In 2 dimension space that can be interpeted as Valence and Arousal in Russel's Circumplex 
+*Dimensionality reduction of participant responses about their feelings* - In 2 dimensions space that can be interpreted as Valence and Arousal in Russel's Circumplex 
 
 <img src='img\Russells-Circumplex.webp' >
 
@@ -68,6 +68,7 @@ Output folder:
 ```python
 def select_green_participants(
         emotions_to_use,
+        normalization='MinMax'
         preprocessed_data_file="preprocessed_data.csv",
         correct_participants=CORRECT_PARTICIPANTS,
 ):
