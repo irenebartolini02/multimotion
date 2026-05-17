@@ -88,18 +88,21 @@ def select_green_participants(emotions_to_use, normalization='MinMax', preproces
 
 
     if normalization == 'MinMax':
-        # Normalization MinMax for each participant score individually (min is the minimum score applied an Max is the maximum score applied by a certain participant across all stimuli)
-        for row in df_for_tensor.itertuples(index=False):
-            participant = row.Participant
-            participant_mask = df_for_tensor['Participant'] == participant
+        # Normalization MinMax per partecipante usando tutti i punteggi delle emozioni insieme.
+        for participant in df_for_tensor['Participant'].unique():
+            participant_mask = df_for_tensor['Participant'] == participant # crea machera booleana che seleziona solo le righe di quel partecipante
+            participant_values = df_for_tensor.loc[participant_mask, emotions_to_use]
+            min_score = participant_values.min().min() #  minimo per ogni emozione e minimo dei minimi
+            max_score = participant_values.max().max()
+
+            if max_score > min_score:  # avoid division by zero
+                normalized_values = (participant_values - min_score) / (max_score - min_score) * 2 - 1
+            else:
+                normalized_values = participant_values.copy()
+                normalized_values.loc[:, :] = 0  # if all scores are the same, set normalized to 0
+
             for emotion in emotions_to_use:
-                norm_col = f'{emotion}_normalized'
-                min_score = df_for_tensor.loc[participant_mask, emotion].min()
-                max_score = df_for_tensor.loc[participant_mask, emotion].max()
-                if max_score > min_score:  # avoid division by zero
-                    df_for_tensor.loc[participant_mask, norm_col] = (df_for_tensor.loc[participant_mask, emotion] - min_score) / (max_score - min_score) * 2 - 1
-                else:
-                    df_for_tensor.loc[participant_mask, norm_col] = 0  # if all scores are the same, set normalized to 0
+                df_for_tensor.loc[participant_mask, f'{emotion}_normalized'] = normalized_values[emotion]
 
     
     else: 
