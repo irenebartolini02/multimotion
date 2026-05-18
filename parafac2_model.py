@@ -1,11 +1,6 @@
 import numpy as np
 import pandas as pd
 from tensorly.decomposition import parafac2
-
-import numpy as np
-import pandas as pd
-import tensorly as tl
-from tensorly.decomposition import parafac2
 from scipy.linalg import orthogonal_procrustes
 
 

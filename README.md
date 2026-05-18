@@ -255,3 +255,34 @@ Top 5:
     
 - **Pros**: fewer parameters to estimate compared with PARAFAC 2, and a more general/stable representation.
 - **Cons**: only two prototype types are extracted, so the individual ground truth is influenced by participant clusters. In general, the ground truth results from translations and dilations of group ground truths (outliers are often ignored). In addition, parameters `R_p` and `R_s` must be set manually, so the model is not fully independent.
+
+
+
+
+## PREPROCESSING DEL TENSORE
+
+### Tensore non centrato, con voti normalizzati usando MinMax
+
+MSE= 0.4018 (Alto)
+
+- Quando normalizzi i dati nell'intervallo $[-1, 1]$, l'intervallo totale di variazione (il range) è pari a $2$.
+- Se calcoli l'errore quadratico medio (MSE), un valore di 0.4018 significa che, in media, la deviazione standard dell'errore (la radice quadrata dell'MSE) è $\sqrt{0.4018} \approx 0.634$.
+- Un errore medio di $0.634$ su un range totale di $2$ significa che il modello sta mancando il valore reale di circa il 31.7% dell'intero range a disposizione.
+
+### Tensore centrato su modo degli stimoli (Modo 1), con voti normalizzati usando MinMax
+
+MSE= 0.1329
+- (radice dell'errore $\approx 0.36$, ovvero solo il 18% del range) 
+
+--> In generale i modelli tensoriali funzionano meglio se i dati sono centrati
+
+### Tensore centrato sui partecipanti (Modo 0), con voti normalizzati MinMax
+
+MSE = 0.11
+però tutte le gt erano sballate
+
+
+### Tensore non centrato, con normalizzazione simmetrica 
+
+MSE= MSE: 0,079939
+- (radice dell'errore $\approx 0.2827$), ovvero il 14% del range
