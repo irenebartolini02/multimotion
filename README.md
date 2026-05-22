@@ -269,20 +269,100 @@ MSE= 0.4018 (Alto)
 - Se calcoli l'errore quadratico medio (MSE), un valore di 0.4018 significa che, in media, la deviazione standard dell'errore (la radice quadrata dell'MSE) è $\sqrt{0.4018} \approx 0.634$.
 - Un errore medio di $0.634$ su un range totale di $2$ significa che il modello sta mancando il valore reale di circa il 31.7% dell'intero range a disposizione.
 
-### Tensore centrato su modo degli stimoli (Modo 1), con voti normalizzati usando MinMax
+### Tensore con normalizzazione Simmetrica 
+Centriamo i voti del singolo partecipante in modo da togliere il bias del metro di giudizio individuale (chi è più di manica larga e chi meno)
+Centriamo i voti sottraendo il valor medio che il partecipante a dato in base all'emozione 
 
-MSE= 0.1329
-- (radice dell'errore $\approx 0.36$, ovvero solo il 18% del range) 
+```python
+elif normalization == 'Simmetric':
+        # Normalizzazione column-wise per partecipante: centra e scala in [-1, +1] in modo indipendente
+        for participant in df_for_tensor['Participant'].unique():
+            participant_mask = df_for_tensor['Participant'] == participant
+            
+            for emotion in emotions_to_use:
+                # Seleziona la singola colonna per il singolo partecipante
+                participant_values = df_for_tensor.loc[participant_mask, emotion]
+                
+                # Centra sui dati specifici di QUELLA emozione
+                mean_score = participant_values.mean()
+                centered_values = participant_values - mean_score
+                
+                # Trova il massimo assoluto specifico per QUELLA emozione
+                max_abs = np.abs(centered_values).max()
+                
+                if max_abs > 0:
+                    normalized_values = centered_values / max_abs
+                else:
+                    normalized_values = centered_values.copy()
+                    normalized_values[:] = 0.0
+                    
+                df_for_tensor.loc[participant_mask, f'{emotion}_normalized'] = normalized_values
+```
+**Mean Space GT**
+<img src='img\mean_space_simmetric_normalization.png'>
+Noto che rispetto al grafo ottenuto con MinMax i valori sono più schiacciati, ma centrati negli assi
 
---> In generale i modelli tensoriali funzionano meglio se i dati sono centrati
 
-### Tensore centrato sui partecipanti (Modo 0), con voti normalizzati MinMax
+MSE=  0.087448 (Accettabile)
+- (radice dell'errore $\approx 0.2957$), ovvero il 15% del range:
+sulla dimensione totale della scala (ampiezza = 2.00):
+$$\text{RMSE} = \sqrt{0.087448} \approx 0.2957$$
 
-MSE = 0.11
-però tutte le gt erano sballate
+$$\text{Percentuale di Errore Medio} = \frac{0.295}{2.00} \times 100 \approx 14.7\%$$
+
+#### Errori di ricostruzione 
+*MSE reconstruction per partecipant:*
+<img  src="img\reconstruction_err_participants.png">
+Notiamo dal grafico a barre che due partecipanti spiccano per l'errore di ricostruzione ['LR96S','SxRtt99']
+Il il partecipante che è stato meglio ricostruito invece è 'V9D5x'
+
+*MSE reconstruction per stimulus:*
+<img  src="img\reconstruction_err_stimulus.png">
+
+*MSE reconstruction per emotion:*
+<img  src="img\reconstruction_err_emotions.png">
 
 
-### Tensore non centrato, con normalizzazione simmetrica 
 
-MSE= MSE: 0,079939
-- (radice dell'errore $\approx 0.2827$), ovvero il 14% del range
+#### Scatter Plot: Valori Reali vs. Valori Ricostruiti
+appiattendo i tensori, originale e ricostruito ho graficato i punti ottenuti che hanno per x il valore originale e per y quello riscostruito.
+Idealmente vorremmo x=y quindi che i punti si disponessero sulla diagonale primo-terzo quadrante (evidenziata in rosso)
+
+<img  src="img\scatter_plot_reconstruction.png">
+Notiamo che il trend segue le aspettative.
+
+
+#### Analisi dei Residui per Partecipante (Boxplot + Swarmplot):
+Il grafico si basa sul concetto di IQR (Interquartile Range).
+Dividiamo i dati in base all'errore di ricostruzione per partecipante in $ guppi:
+- Q1(Primo Quartile / 25° percentile): È il valore sotto il quale si trova il 25% dei partecipanti con l'MSE più basso.
+- Q2 (Secondo Quartile o Mediana / 50° percentile): È il valore centrale.
+- Q3 (Terzo Quartile / 75° percentile): È il valore sotto il quale si trova il 75% dei partecipanti. Solo il 25% ha un errore più alto di questo punto. 
+
+$$IQR = Q3 - Q1$$ 
+*Rappresenta la "lunghezza" della scatola e indica dove si concentra il 50% centrale dei dati.*
+
+In seguito selezioniamo gli outliers seguendo il **Metodo di Tukey**:
+Il metodo dell'1.5 × IQR (chiamato anche criterio di Tukey) è lo standard scientifico per decretare se un dato è una legittima fluttuazione statistica o un'anomalia (outlier).
+Limite Superiore:$$\text{Limite Superiore} = Q3 + (1.5 \times IQR)$$
+
+
+
+<img  src="img\outliers.png">
+
+Il metodo rileva due outliers: ['LR96S','SxRtt99'] che il modello fa fatica a ricostruire fedelmente, questo è dovuto al fatto che la loro percezione si discosta da quella grammatica latante del gruppo ($\Phi$)
+
+
+#### Heatmaps 
+*Best reconstructed partecipant*
+<img  src="img\best_partecipant_reconstruction_heatmap.png">
+Osservando la mapppa originale (a sinistra) e quella ricostruita (a destra), si nota che le bande verticali coincidono quasi perfettamente. Le colonne molto chiare (giallo/verdi) e quelle scure (viola) si trovano nelle stesse posizioni in entrambe le matrici.
+
+Questo partecipante è un "soggetto ideale". Le sue risposte emotive seguono fedelmente la struttura latente globale del gruppo. Il modello riesce a catturare i suoi pattern con estrema facilità, "ripulendo" al contempo i dati dal rumore di fondo (infatti l'immagine ricostruita a destra appare come una versione più fluida e sfumata dell'originale a sinistra).
+I colori ricostruiti sono meno intensi (sfumati) questo fenomeno prende il nome di smoothing (smussamento) dovuto alla riduzione di dimensionalità.
+
+*Worse reconstructed partecipant*
+<img  src="img\worse_partecipant_reconstruction_heatmap.png">
+
+In questo caso spesso i pattern di alternanza blu/giallo non sono rispettati perchè il modello fatica a ricostruire le risposte del partecipante in quanto si discosta molto dallo stato latente del gruppo.
+

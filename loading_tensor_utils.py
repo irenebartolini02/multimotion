@@ -103,27 +103,33 @@ def select_green_participants(emotions_to_use, normalization='MinMax', preproces
 
             for emotion in emotions_to_use:
                 df_for_tensor.loc[participant_mask, f'{emotion}_normalized'] = normalized_values[emotion]
+    
     elif normalization == 'Simmetric':
-    # Normalization: centra a zero e distribuisce simmetricamente tra -1 e +1
+        # Normalizzazione column-wise per partecipante: centra e scala in [-1, +1] in modo indipendente
         for participant in df_for_tensor['Participant'].unique():
             participant_mask = df_for_tensor['Participant'] == participant
-            participant_values = df_for_tensor.loc[participant_mask, emotions_to_use]
-            
-            # Centra i dati
-            mean_score = participant_values.mean().mean()
-            centered_values = participant_values - mean_score
-            
-            # Trova il valore massimo assoluto per scalare simmetricamente
-            max_abs = np.abs(centered_values).max().max()
-            
-            if max_abs > 0:
-                normalized_values = centered_values / max_abs
-            else:
-                normalized_values = centered_values.copy()
-                normalized_values.loc[:, :] = 0
             
             for emotion in emotions_to_use:
-                df_for_tensor.loc[participant_mask, f'{emotion}_normalized'] = normalized_values[emotion]
+                # Seleziona la singola colonna per il singolo partecipante
+                participant_values = df_for_tensor.loc[participant_mask, emotion]
+                
+                # Centra sui dati specifici di QUELLA emozione
+                mean_score = participant_values.mean()
+                centered_values = participant_values - mean_score
+                
+                # Trova il massimo assoluto specifico per QUELLA emozione
+                max_abs = np.abs(centered_values).max()
+                
+                if max_abs > 0:
+                    normalized_values = centered_values / max_abs
+                else:
+                    normalized_values = centered_values.copy()
+                    normalized_values[:] = 0.0
+                    
+                df_for_tensor.loc[participant_mask, f'{emotion}_normalized'] = normalized_values
+    #elif normalization == 'Z-score':
+        # da provare
+
     else: 
         # Normalization Overall: each score is normalized using the global min and max (0 and 9)
         min=0
