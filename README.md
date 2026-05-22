@@ -339,12 +339,14 @@ Dividiamo i dati in base all'errore di ricostruzione per partecipante in $ guppi
 - Q2 (Secondo Quartile o Mediana / 50° percentile): È il valore centrale.
 - Q3 (Terzo Quartile / 75° percentile): È il valore sotto il quale si trova il 75% dei partecipanti. Solo il 25% ha un errore più alto di questo punto. 
 
-$$IQR = Q3 - Q1$$ 
+$IQR = Q3 - Q1$\\
+
 *Rappresenta la "lunghezza" della scatola e indica dove si concentra il 50% centrale dei dati.*
 
 In seguito selezioniamo gli outliers seguendo il **Metodo di Tukey**:
 Il metodo dell'1.5 × IQR (chiamato anche criterio di Tukey) è lo standard scientifico per decretare se un dato è una legittima fluttuazione statistica o un'anomalia (outlier).
-Limite Superiore:$$\text{Limite Superiore} = Q3 + (1.5 \times IQR)$$
+Limite Superiore:
+$\text{Limite Superiore} = Q3 + (1.5 \times IQR)$
 
 
 
