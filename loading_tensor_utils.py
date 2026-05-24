@@ -127,8 +127,26 @@ def select_green_participants(emotions_to_use, normalization='MinMax', preproces
                     normalized_values[:] = 0.0
                     
                 df_for_tensor.loc[participant_mask, f'{emotion}_normalized'] = normalized_values
-    #elif normalization == 'Z-score':
-        # da provare
+    
+    elif normalization == 'Z-Score':
+        # Normalizzazione Z-score column-wise per partecipante
+        for participant in df_for_tensor['Participant'].unique():
+            participant_mask = df_for_tensor['Participant'] == participant
+            
+            for emotion in emotions_to_use:
+                participant_values = df_for_tensor.loc[participant_mask, emotion]
+                
+                mean_score = participant_values.mean()
+                std_score = participant_values.std()
+                
+                # Evita la divisione per zero se il soggetto ha dato sempre lo stesso identico voto
+                if std_score > 0:
+                    normalized_values = (participant_values - mean_score) / std_score
+                else:
+                    normalized_values = participant_values.copy()
+                    normalized_values[:] = 0.0
+                    
+                df_for_tensor.loc[participant_mask, f'{emotion}_normalized'] = normalized_values
 
     else: 
         # Normalization Overall: each score is normalized using the global min and max (0 and 9)
