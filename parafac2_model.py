@@ -247,3 +247,55 @@ def parafac2_classic(tensor, rank , n_iter_max=500, tol=1e-8):
         A_list.append(Ai)
 
     return A_list, B_base, C_computed 
+
+
+def compute_validation_gt(B, C, participant_scores):
+    """
+    Compute the ground truth of a person who was not in the training set.
+    
+    Stima A_i per il nuovo partecipante proiettando i suoi dati
+    nello spazio latente definito da B e C fissi, senza riaddestrare.
+    
+    Il problema è:
+        min_{A_i} ||X_i - A_i @ B @ C.T||^2_F
+        soggetto a: A_i.T @ A_i = Phi  (vincolo PARAFAC2)
+    
+    Soluzione analitica via SVD (stessa formula dell'update in training):
+        target = X_i @ C @ pinv(C.T @ C) @ B.T    shape (J, R)
+        U, _, Vt = SVD(target)
+        A_i = U @ Vt                               semi-ortogonale
+    
+    Args:
+        B                 : (R, R)    scaling condiviso dal training
+        C                 : (K, R)    emozioni fisse (Russell)
+        participant_scores: (J, K)    voti normalizzati del nuovo partecipante
+                           J = n_stimuli, K = n_emotions
+    
+    Returns:
+        GT_new: (J, 2) con colonne [Valence, Arousal] per ogni stimolo
+    """
+    # Verifica dimensioni
+    J, K = participant_scores.shape
+    R = B.shape[0]
+    assert C.shape == (K, R), f"C shape mismatch: expected ({K},{R}), got {C.shape}"
+    assert B.shape == (R, R), f"B shape mismatch: expected ({R},{R}), got {B.shape}"
+
+    # Pre-calcola (C.T @ C)^{-1} — stessa operazione del training
+    CtC_inv = np.linalg.pinv(C.T @ C)   # (R, R)
+
+    # Calcola il target per SVD:
+    # target[j, r] = sum_k X_i[j,k] * C[k,:] @ CtC_inv @ B.T[:,r]
+    # shape: (J, K) @ (K, R) @ (R, R) @ (R, R) = (J, R)
+    target = participant_scores @ C @ CtC_inv @ B.T   # (J, R)
+
+    # SVD del target: trova A_i semi-ortogonale ottimale
+    # A_i = U @ Vt garantisce A_i.T @ A_i = I (≈ Phi del training)
+    U, _, Vt = np.linalg.svd(target, full_matrices=False)
+    A_i = U @ Vt   # (J, R)
+
+    # GT individuale: proietta A_i nel piano Valence/Arousal tramite B
+    # GT_new[j, 0] = Valence percepita per lo stimolo j
+    # GT_new[j, 1] = Arousal percepito per lo stimolo j
+    GT_new = A_i @ B   # (J, R)
+
+    return GT_new

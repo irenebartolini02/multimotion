@@ -300,7 +300,6 @@ elif normalization == 'Simmetric':
 ```
 **Mean Space GT**
 <img src='img\mean_space_simmetric_normalization.png'>
-Noto che rispetto al grafo ottenuto con MinMax i valori sono più schiacciati, ma centrati negli assi
 
 
 MSE=  0.087448 (Accettabile)
