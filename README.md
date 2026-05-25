@@ -24,7 +24,7 @@ Number of green participants: **63**
     - This notation is used to map feelings into a 2D space according to **Russell's Circumplex Model**.
 
 ```python
-stimulus = [
+stimuli = [
         "HN_1", "HN_4", "HN_5", "HN_6", "HN_7", "HN_8",
         "HP_2", "HP_4", "HP_5", "HP_6", "HP_8",
         "LN_1", "LN_2", "LN_3", "LN_4", "LN_5", "LN_6", "LN_8",
@@ -367,7 +367,144 @@ I colori ricostruiti sono meno intensi (sfumati) questo fenomeno prende il nome 
 
 In questo caso spesso i pattern di alternanza blu/giallo non sono rispettati perchè il modello fatica a ricostruire le risposte del partecipante in quanto si discosta molto dallo stato latente del gruppo.
 
-### Leave One Out Experiment
+### Analisi dei partecipanti 
+Ho calcolato la distribuzione dei voti usati dai partecipanti per controllare perchè gli outliers fossero difficili da ricostruire.
+
+Già dalla distribuzione possiamo notare ad occhio che si tratta di una bimodale:
+<img src="img\participant_analysis\SxRtt99_histogram.png">
+<img src="img\participant_analysis\LR96S_histogram.png">
+
+Per controllare ulteriormente l'andamento della distribuzione ho calcolato skewness e kurtosis per ogni partecipante.
+Sono indicatori statistici fondamentali usati per descrivere la forma di una distribuzione di dati e misurare quanto questa si discosti da una perfetta distribuzione normale (a campana).
+
+1. Skewness (Asimmetria)
+La skewness misura la simmetria di una distribuzione rispetto alla sua media. Indica se i dati sono sbilanciati verso destra o verso sinistra. 
+
+- *Simmetrica (Skewness)*: La curva è perfettamente bilanciata. Media, mediana e moda coincidono.
+- *Asimmetria Positiva (Skewness > 0)*: La "coda" della distribuzione è più lunga verso destra (valori alti). La media è maggiore della mediana.
+- *Asimmetria Negativa (Skewness < 0)*: La "coda" è più lunga verso sinistra (valori bassi). La media è minore della mediana. 
+
+2. Kurtosis (Curtosi)
+La kurtosis misura il livello di appiattimento o appuntimento della distribuzione rispetto alla normale, e indica quanto i dati sono concentrati al centro o pesanti sulle code (presenza di outlier). 
+
+- *Mesocurtica (Kurtosis)*: La distribuzione ha la stessa forma di una normale. L'eccesso di curtosi è zero.
+- *Leptocurtica (Kurtosis > 3 / Eccesso > 0)*: Distribuzione più appuntita con code pesanti. Significa che c'è un'alta concentrazione di dati attorno alla media, ma anche molti valori anomali estremi.
+- *Platicurtica (Kurtosis < 3 / Eccesso < 0)*: Distribuzione più piatta e schiacciata. I dati sono più dispersi e le code sono più leggere  
+
+Dall'esperimento 18 partecipanti presentano distribuzione platicurtiche (come i nostri outliers): 
+
+```text
+Rilevati 18 partecipanti con distribuzioni platicurtiche:
+Partecipante: F8mDn
+  Skewness: 0.4612 -> Simmetrica
+  Kurtosis: -1.4888 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: GHft8
+  Skewness: 0.5784 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.4019 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: yb3T2
+  Skewness: 0.4892 -> Simmetrica
+  Kurtosis: -1.3637 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+* Partecipante: LR96S
+  Skewness: 0.6388 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.3241 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+* Partecipante: SxRtt99
+  Skewness: 0.6952 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.3220 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: Hx7dO
+  Skewness: 0.6336 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.3000 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: Kgh4P3
+  Skewness: 0.5720 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.2786 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: NMy2s
+  Skewness: 0.6900 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.2421 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: rt8Ye0r
+  Skewness: 0.4961 -> Simmetrica
+  Kurtosis: -1.2200 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: hMHEK1
+  Skewness: 0.5781 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.1694 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: A5feTy
+  Skewness: 0.6775 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.1489 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: M4t7k
+  Skewness: 0.7118 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.1404 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: kH4Dd
+  Skewness: 0.4382 -> Simmetrica
+  Kurtosis: -1.0929 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: XfdEE1
+  Skewness: 0.6779 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.0841 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: O1pGR
+  Skewness: 0.5727 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.0839 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: SI3pa2
+  Skewness: 0.8125 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.0417 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: 4FoNM
+  Skewness: 0.4304 -> Simmetrica
+  Kurtosis: -1.0288 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+Partecipante: G4dLl
+  Skewness: 0.5225 -> Asimmetria Positiva (Coda a destra)
+  Kurtosis: -1.0056 -> Platicurtica (Piatta / Code leggere)
+--------------------------------------------------
+
+```
+
+Per distinguere tra queste distribuzioni ho calcolato la percentuale di voti concentrati ai bordi e quella dei voti centrali.
+
+| Participant | Tipo | % Voti massimi (9) | % Voti Esatti (0 o 9) | % Voti Estremi (0-1 o 8-9) | % Voti Centrali (2-7) |
+|---|---|---:|---:|---:|---:|
+| SxRtt99 | Outlier | 22.149123 | 71.052632 | 82.675439 | 15.131579 |
+| LR96S | Outlier | 18.201754 | 63.377193 | 75.877193 | 21.491228 |
+| SI3pa2 | Platicurtico Sano | 14.473684 | 64.254386 | 76.973684 | 20.394737 |
+| Hx7dO | Platicurtico Sano | 14.254386 | 49.561404 | 74.342105 | 23.464912 |
+| NMy2s | Platicurtico Sano | 14.254386 | 57.675439 | 76.315789 | 21.929825 |
+| GHft8 | Platicurtico Sano | 14.035088 | 57.894737 | 75.877193 | 21.929825 |
+| A5feTy | Platicurtico Sano | 11.403509 | 51.754386 | 68.640351 | 28.728070 |
+| M4t7k | Platicurtico Sano | 11.184211 | 52.412281 | 71.710526 | 26.096491 |
+| hMHEK1 | Platicurtico Sano | 8.114035 | 35.745614 | 60.745614 | 37.061404 |
+| O1pGR | Platicurtico Sano | 6.140351 | 33.333333 | 55.701754 | 42.543860 |
+| Kgh4P3 | Platicurtico Sano | 5.921053 | 43.201754 | 62.938596 | 34.868421 |
+| F8mDn | Platicurtico Sano | 5.701754 | 39.254386 | 68.859649 | 28.947368 |
+| G4dLl | Platicurtico Sano | 3.508772 | 17.982456 | 45.175439 | 52.631579 |
+| XfdEE1 | Platicurtico Sano | 3.508772 | 36.184211 | 62.061404 | 36.184211 |
+| yb3T2 | Platicurtico Sano | 3.070175 | 35.964912 | 60.745614 | 37.500000 |
+| rt8Ye0r | Platicurtico Sano | 1.754386 | 20.175439 | 50.657895 | 46.710526 |
+| kH4Dd | Platicurtico Sano | 0.438596 | 19.736842 | 42.324561 | 55.921053 |
+| 4FoNM | Platicurtico Sano | 0.438596 | 3.070175 | 38.815789 | 59.429825 |
+
+Anche dalle heatmap si nota che gli outlier utilizzano massicciamente il voto massimo 9, anche in contemporanea tra emozioni opposte.
+
+*Outliers*
+<img src="img\heatmap_SxRtt99.png">
+<img src="img\heatmap_LR96S.png">
+
+*Caso Platicurtico Sano*
+<img src="img\heatmap_SI3pa2.png">
+
+
+
+## Leave One Out Experiment
 Per valutare il modello i parametri sono stati stimati con 62 partecipanti, escludendo il partecipante '4FoNM', per poi stimare a posteriore la GT del medesimo e confrontarla con quella degli esperimenti precedenti. 
 
 Il metodo `compute_validation_gt` dati gli score normalizzati di un partecipante stima la matrice A (38,2) individuale, date i parametri fissi stimati del modello su 62 partecipanti (B, C, Phi), e genera la GT del partecipante $A_{partecipante} @ B$
@@ -432,5 +569,8 @@ def compute_validation_gt(B, C, participant_scores):
 - Distanza mediana tra GT LOO e Completo: 0.0018
 
 <img src="img\LOO_experiment.png">
+
+
+
 
 
