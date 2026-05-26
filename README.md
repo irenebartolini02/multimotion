@@ -502,6 +502,7 @@ Anche dalle heatmap si nota che gli outlier utilizzano massicciamente il voto ma
 *Caso Platicurtico Sano*
 <img src="img\heatmap_SI3pa2.png">
 
+Reconstruction MSE for SI3pa2: 0.1115 che è accettabile
 
 
 ## Leave One Out Experiment
