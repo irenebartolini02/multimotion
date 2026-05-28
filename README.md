@@ -504,6 +504,8 @@ Anche dalle heatmap si nota che gli outlier utilizzano massicciamente il voto ma
 
 Reconstruction MSE for SI3pa2: 0.1115 che è accettabile
 
+L'ispezione visiva delle heatmap di risposta, combinata con l'analisi quantitativa dei punteggi, individua la causa specifica dell'alto errore di ricostruzione (MSE) nei soggetti LR96S e SxRtt99. Mentre i partecipanti platicurtici sani (es. SI3pa2) utilizzano i punteggi massimi ($\ge 8$) in modo selettivo e strutturato, ancorandoli a specifici blocchi di stimoli coerenti con il modello circomplesso di Russell, i due outlier mostrano un fenomeno di 'saturazione da punteggio massimo'.I soggetti SxRtt99 e LR96S presentano frequenze anomale di voti pari a 9 (rispettivamente il 22.15% e il 18.20% del totale delle risposte, contro una media campionaria significativamente inferiore). Questo accade a causa di attivazioni conflittuali, in cui voti massimi vengono assegnati simultaneamente a costrutti emotivi ortogonali o polarmente opposti (es. risposte massime simultanee su scale positive e negative per lo stesso stimolo). Poiché i vincoli strutturali del modello PARAFAC2 mantengono la matrice emotiva $\mathbf{C}$ ancorata alla teoria biologica e impediscono la deformazione dello spazio latente, tale incoerenza non-lineare non viene integrata nelle componenti e si scarica interamente sui residui, validando l'esclusione di questi due soggetti come outlier di risposta
+
 
 ## Leave One Out Experiment
 Per valutare il modello i parametri sono stati stimati con 62 partecipanti, escludendo il partecipante '4FoNM', per poi stimare a posteriore la GT del medesimo e confrontarla con quella degli esperimenti precedenti. 
